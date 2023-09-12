@@ -7,7 +7,7 @@ router.post("/addtodolist", async(req, res)=>{
     console.log(req.body);
     try{
 
-        TodoLists.create({
+        await TodoLists.create({
             title: title
         }).catch((e)=>{
             if(e){
@@ -76,5 +76,45 @@ router.get("/todolist/:id/todoitems", async(req, res)=>{
     }catch(e){
         res.status(500).json({message:"An error occurred"});
     }
+});
+
+router.delete("/todolist/:listid/deleteitem/:itemid", async(req, res)=>{
+    try{
+        // const listId = req.params.listid;
+        const itemId = req.params.itemid;
+        
+        const item = await TodoItems.findByPk(itemId);
+
+        if(!item){
+            res.status(404).json({message:"Todo item not found"});
+        }
+
+        await item.destroy();
+
+        res.status(200).json({message:"Todo item deleted successfully"});
+
+    }catch(e){
+        res.status(500).json({message:"An error occurred"});
+    }
 })
+
+router.delete("/deletelist/:listid", async(req, res)=>{
+    try{
+        const listId = req.params.listid;
+
+        const list = await TodoLists.findByPk(listId);
+    
+        if(!list){
+            res.status(404).json({message:"List not found"});
+        }
+
+        await list.destroy();
+
+        res.status(200).json({message:"Todo List deleted successfully"});
+
+    }catch(e){
+        res.status(500).json({message:"An error occurred"});
+    }
+
+});
 module.exports = router
