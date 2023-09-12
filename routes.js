@@ -110,11 +110,11 @@ router.delete("/deletelist/:listid", async(req, res)=>{
 
         await list.destroy();
 
-        res.status(200).json({message:"Todo List deleted successfully"});
+        res.status(200).json({message:"Todo item deleted successfully"});
 
     }catch(e){
         res.status(500).json({message:"An error occurred"});
     }
 
-});
+})
 module.exports = router
