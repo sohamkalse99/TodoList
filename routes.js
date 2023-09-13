@@ -116,5 +116,32 @@ router.delete("/deletelist/:listid", async(req, res)=>{
         res.status(500).json({message:"An error occurred"});
     }
 
-})
+});
+
+router.put("/todolist/:listid/updateitem/:itemid", async(req, res)=>{
+    // const listid = req.params.listid;
+
+    try{
+
+        const itemId = req.params.itemid;
+        // console.log(req.body);
+        const updatedTodoItem = req.body;
+    
+        const item = await TodoItems.findByPk(itemId);
+    
+        if(!item){
+            res.status(404).json({message:"Todo Item not found"});
+        }
+    
+        await TodoItems.update(updatedTodoItem,{
+            where:{id:itemId}
+        });
+
+        res.status(200).json("Todo Item updated successfully");
+    }catch(e){
+        res.status(500).json({message:"An error occurred"});
+    }
+    
+
+});
 module.exports = router
